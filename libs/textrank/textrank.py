@@ -18,13 +18,13 @@ class RawSentence:
 
 
 class RawSummarizerReader:
-    def __init__(self, filepath):
-        self.filepath = filepath
+    def __init__(self, contents):
+        self.contents = contents
         self.rgxSplitter = re.compile('([.!?:](?:["\']|(?![0-9])))')
 
     def __iter__(self):
-        for line in open(self.filepath, encoding='utf-8'):
-            ch = self.rgxSplitter.split(line)
+        for content in self.contents:
+            ch = self.rgxSplitter.split(content.lstrip())
             for s in map(lambda a, b: a + b, ch[::2], ch[1::2]):
                 if not s: continue
                 yield s
@@ -52,18 +52,18 @@ class RawTagger:
 
 
 class RawTaggerReader:
-    def __init__(self, filepath, tagger=None):
+    def __init__(self, contents, tagger=None):
         if tagger:
             self.tagger = tagger
         else:
             from konlpy.tag import Komoran
             self.tagger = Komoran()
-        self.filepath = filepath
+        self.contents = contents
         self.rgxSplitter = re.compile('([.!?:](?:["\']|(?![0-9])))')
 
     def __iter__(self):
-        for line in open(self.filepath, encoding='utf-8'):
-            ch = self.rgxSplitter.split(line)
+        for content in self.contents:
+            ch = self.rgxSplitter.split(content.lstrip())
             for s in map(lambda a, b: a + b, ch[::2], ch[1::2]):
                 if not s: continue
                 yield self.tagger.pos(s)
