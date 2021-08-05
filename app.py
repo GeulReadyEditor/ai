@@ -1,22 +1,23 @@
 from flask import Flask, jsonify
 # mysql
 # from flask_mysqldb import MySQL
-import mysql.connector
-app =   Flask(name)
+app = Flask(__name__)
 
 # mysql start
 # app.secret_key ="1234"
-# app.configs["MYSQL_HOST"] = "localhost"
-# app.configs["MYSQL_USER"] = "root"
-# app.configs["MYSQL_PASSWORD"] = "0000"
-# app.configs["MYSQL_DB"] = "scott"
+app.config["USERNAME"] = "onego"
+app.config["PASSWORD"] = "test123"
+app.config["HOST"] = "onegomongo.ddns.net"
+app.config["PORT"] = "80"
+app.config["DATABASE"] = "onego"
 
-mysql = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="0000",
-    database="scott"
-)
+
+# mysql = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     passwd="0000",
+#     database="scott"
+# )
 
 # mysql end
 
@@ -24,12 +25,6 @@ mysql = mysql.connector.connect(
 def hello():
     return "Hello world!"
 
-@app.route('/json')
-def jsonapi():
-    cursor = mysql.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM s_dept")
-    rv = cursor.fetchall()
-    return jsonify(rv)
 
 # 1. dict(), list() 다루는 법
 # 2. str (json)-> dict, list

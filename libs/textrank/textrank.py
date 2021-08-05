@@ -1,5 +1,6 @@
 import networkx
 import re
+import _jpype
 
 class RawSentence:
     def __init__(self, textIter):
@@ -56,6 +57,7 @@ class RawTaggerReader:
         if tagger:
             self.tagger = tagger
         else:
+            # import _jpype
             from konlpy.tag import Komoran
             self.tagger = Komoran()
         self.contents = contents
@@ -69,6 +71,14 @@ class RawTaggerReader:
                 yield self.tagger.pos(s)
 
 
+'''
+TextRank 관련 인자
+* window : 문맥으로 사용할 단어의 개수. 기본값 5로 주면 특정 단어의 좌우 5개씩, 총 10개 단어를 문맥으로 사용
+* coef : 동시출현 빈도를 weight에 반영하는 비율. 기본값은 1.0로, 동시출현 빈도를 weight에 전부 반영
+        0.0일 경우 빈도를 반영하지 않고 모든 간선의 weight을 1로 동일하게 간주
+* threshold: 문서 요약시 관련있는 문장으로 여길 최소 유사도값. 
+             기본값은 0.005이고, 이 값보다 작은 유사도를 가지는 문장쌍은 관련없는문장으로 처리
+'''
 class TextRank:
     def __init__(self, **kargs):
         self.graph = None
@@ -158,18 +168,18 @@ class TextRank:
             tuples[(k,)] = self.getI(k) * ranks[k]
             for l in cand:
                 if k == l: continue
-                pmi = self.getPMI(k, l)
+                pmi = self.getPMI(k, l) #PMI가 높을수록 같이 등장할 확률 높음
                 if pmi: pairness[k, l] = pmi
 
         for (k, l) in sorted(pairness, key=pairness.get, reverse=True):
-            print(k[0], l[0], pairness[k, l])
+            # print(k[0], l[0], pairness[k, l])
             if k not in startOf: startOf[k] = (k, l)
 
         for (k, l), v in pairness.items():
             pmis = v
             rs = ranks[k] * ranks[l]
             path = (k, l)
-            tuples[path] = pmis / (len(path) - 1) * rs ** (1 / len(path)) * len(path)
+            tuples[path] = pmis / (len(path) - 1) * rs ** (1 / len(path)) * len(path) # 키워드를 어떻게 이으면좋을지판단.. TR기하평균 * PMI값들의 산술평균 * 경로 길이
             last = l
             while last in startOf and len(path) < 7:
                 if last in path: break
@@ -188,7 +198,6 @@ class TextRank:
 
         # for k in cand:
         #    if k not in used or True: both[k] = ranks[k] * self.getI(k)
-
         return both
 
     def summarize(self, ratio=0.333):
