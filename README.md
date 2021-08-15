@@ -1,6 +1,7 @@
 # ONE GO AI SERVER
 
-## Installation
+
+### Installation
 `pip install -r requirements.txt`
 
 #### cf) konlpy installation
@@ -15,17 +16,20 @@
 
 &emsp;https://konlpy-ko.readthedocs.io/ko/v0.4.3/install/
 
-## Scripts
+### Scripts
 
 #### `python start_flask.py`
 Runs the app.
 Open http://localhost:5000 to view it in the browser.
 
-------------------------------------------------------------------------------------------------------------------------------------------------
+<br>
+<br>
+
 
 ## FLASK REST API
 
-#### `complete.py`
+### __1. Sentence Complete__
+`complete.py`
 How to run? python complete.py in path 'libs/sentence_complete'
 What is input & output?
   |--|--|
