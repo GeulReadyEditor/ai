@@ -34,5 +34,6 @@ What is input & output?
 How to check on POST MAN? 
   <li> POST http://localhost:2727/complete
   <li> Body > form-data > KEY text, VALUE "the sentence what you want to complete"
+    
   ![image](https://user-images.githubusercontent.com/76719920/129465341-f50930f0-75c2-453c-92a4-62daaae60cd5.png)
 
