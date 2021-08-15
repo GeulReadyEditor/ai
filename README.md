@@ -20,3 +20,19 @@
 #### `python start_flask.py`
 Runs the app.
 Open http://localhost:5000 to view it in the browser.
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+## FLASK REST API
+
+#### `complete.py`
+How to run? python complete.py in path 'libs/sentence_complete'
+What is input & output?
+  |--|--|
+  |input|output|
+  |Key, Value|list in json|
+How to check on POST MAN? 
+  <li> POST http://localhost:2727/complete
+  <li> Body > form-data > KEY text, VALUE "the sentence what you want to complete"
+  ![image](https://user-images.githubusercontent.com/76719920/129465341-f50930f0-75c2-453c-92a4-62daaae60cd5.png)
+
