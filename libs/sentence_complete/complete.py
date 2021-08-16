@@ -1,23 +1,15 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
-import random
 import re
 
-from flask import Flask, request, Response, render_template, jsonify
-
-app = Flask(__name__)
-app.debug = True
-
-@app.route("/complete", methods=['POST'])
-def sentence_complete():
-
+def sentence_complete(text):
     response = requests.post(
-        #브런치, 말뭉치
+        #브런치, 말뭉치 학습한 api
         url = "https://train-bc1rqj6ngwhfyti9fyf0-gpt2-train-teachable-ainize.endpoint.ainize.ai/predictions/gpt-2-ko-small-finetune",
         headers={"Content-Type": "application/json; charset=utf-8"},
         data=json.dumps({
-            "text": request.form['text'],
+            "text": text,
             "num_samples": 5,
             "length": 60
         })
@@ -31,9 +23,6 @@ def sentence_complete():
         text = hanguel.sub('', sentence)
         result = re.sub('[-=+#/:^$@*\"※~&%ㆍ_!』\\‘|\(\)\[\]\<\>`\'…》]', '', text)  # 혹시모르는 특수문자 전부제거
         results.append(result)
-    return jsonify(results)
 
-
-if __name__ == '__main__':
-    app.run(host='localhost', port=2727)
+    return results
 

@@ -70,7 +70,6 @@ class RawTaggerReader:
                 if not s: continue
                 yield self.tagger.pos(s)
 
-
 '''
 TextRank 관련 인자
 * window : 문맥으로 사용할 단어의 개수. 기본값 5로 주면 특정 단어의 좌우 5개씩, 총 10개 단어를 문맥으로 사용
