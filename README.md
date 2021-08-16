@@ -31,9 +31,6 @@ Open http://localhost:5000 to view it in the browser.
 ### __1. Sentence Complete__
 `complete.py`
 
-How to run? python complete.py in path 'libs/sentence_complete'
-<br>
-
 What is input & output?
   |input|output|
   |--|--|
@@ -45,4 +42,35 @@ How to check on POST MAN?
   <li> Body > form-data > KEY text, VALUE "the sentence what you want to complete"
     
   ![image](https://user-images.githubusercontent.com/76719920/129465341-f50930f0-75c2-453c-92a4-62daaae60cd5.png)
+    
+    
+### __2. Summarize__
+`summarizer.py`
 
+What is input & output?
+  |input|output|
+  |--|--|
+  | list[str]|str|
+<br>
+  
+How to check on POST MAN? 
+  <li> POST http://localhost:2727/summarizer
+  <li> Body > raw, JSON > KEY "contents", VALUE ["the sentence what you want to summarize"]
+    
+  ![image](https://user-images.githubusercontent.com/76719920/129529476-617e81c2-0395-44bd-a956-af4c752ad41b.png)
+    
+ 
+### __3. Tagger__
+`tagger.py`
+
+What is input & output?
+  |input|output|
+  |--|--|
+  |list[str]|list[str]|
+<br>
+  
+How to check on POST MAN? 
+  <li> POST http://localhost:2727/tagger
+  <li> Body > raw, JSON > KEY "contents", VALUE ["the sentence what you want to extract tags"]
+    
+  ![image](https://user-images.githubusercontent.com/76719920/129531266-c982ba31-da7a-40e2-9ac8-87f1d4c40a78.png)
