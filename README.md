@@ -32,8 +32,8 @@ Open http://localhost:5000 to view it in the browser.
 `complete.py`
 How to run? python complete.py in path 'libs/sentence_complete'
 What is input & output?
-  |--|--|
   |input|output|
+  |--|--|
   |Key, Value|list in json|
 How to check on POST MAN? 
   <li> POST http://localhost:2727/complete
