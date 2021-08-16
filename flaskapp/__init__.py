@@ -1,17 +1,7 @@
-import json
-
-import pymongo
 from flask import Flask, jsonify, request, render_template
-from flask_pymongo import PyMongo
-import requests
-
-
-# configs
-# from configs import *
-
 from libs.textrank import summarizer
 from libs.textrank import tagger
-# from libs.sentence_complete import complete
+from libs.sentence_complete import complete
 
 
 
@@ -21,27 +11,25 @@ app.debug = True
 
 @app.route("/summarizer", methods=['POST'])
 def get_summarizer():
-    contents = request.form["contents"]
+    contents = request.get_json()['contents']
     summary = summarizer.summarizing(contents)
     return summary
 
 
 @app.route("/tagger", methods=['POST'])
 def get_tagger():
-    contents = request.form["contents"]
+    contents = request.get_json()['contents']
     tag = tagger.tagging(contents)
-    return tag
+    return jsonify(tag)
 
-# @app.route("/complete", methods=['POST'])
-# def get_complete():
-#     text = request.form['text']
-#     num_samples = 5
-#     length = 60
-#     sentence_complete = complete.sentence_complete(text, num_samples, length)
-#     result = ""
-#     for r in sentence_complete:
-#         result += r
-#     return result
+@app.route("/complete", methods=['POST'])
+def get_complete():
+    text = request.form['text']
+    sentence_complete = complete.sentence_complete(text)
+    complete_sentences = []
+    for r in sentence_complete:
+        complete_sentences.append(r)
+    return jsonify(complete_sentences)
 
 
 
