@@ -16,8 +16,7 @@ if __name__ == '__main__':
     sched = BlockingScheduler(daemon=True)  # deamon : flask를 종료할 떄 스레드 종료 가능
 
     # 매일 오후 23시 59분에 실행
-    # sched.add_job(exec_cron, 'cron', hour=23, minute=59)
-    sched.add_job(exec_cron, 'cron', hour=14, minute=45)
+    sched.add_job(exec_cron, 'cron', hour=23, minute=59)
 
     print('sched before ~')
     sched.start()
