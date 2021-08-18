@@ -4,8 +4,63 @@ import numpy as np
 import tensorflow._api.v2.compat.v1 as tf
 tf.disable_v2_behavior()
 import pandas as pd
-import get_from_db
-import insert_in_db
+from flask import Flask, jsonify, request, render_template
+from flask_pymongo import PyMongo
+
+# from libs.recommendation import get_from_db
+# from libs.recommendation import insert_in_db
+
+# get from db
+#사용자에게 해당하는 태그 불러오기
+def get_keywords():
+    app = Flask(__name__)
+    app.debug = True
+
+    # response order
+    app.config["JSON_SORT_KEYS"] = False
+    # DB = dbConnection.DB
+    app.config["MONGO_URI"] = "mongodb://onego:test123@onegodev.ddns.net:2727/onego?authsource=admin"
+    mongo = PyMongo(app)
+
+    cursor = mongo.db.user.find({},
+                                {
+                                    "_id": 0,
+                                    "name": 0,
+                                    "nickname": 0,
+                                    "intro": 0,
+                                    "profileImage": 0,
+                                    "scraps": 0,
+                                    "likes": 0,
+                                    "followers": 0,
+                                    "followings": 0
+                                }
+                                )
+    list_cur = list(cursor)
+    # print(list_cur)
+    result_list = ""
+    for x in list_cur:
+        result_string = ""
+        result_string += x['email']
+        result_string += " "
+        # print(x) #{'email': 'parktae27@admin.com', 'tags': ['물집', '완주', '지구', '사람', '마라톤', '무릎', '슈퍼맨', '포기', '운동']
+        for tag in x['tags']:
+            result_string += tag
+            result_string += " "
+            # print(result_string)
+        result_list += result_string
+        result_list += "\n"
+
+    '''
+    sciencelife@admin.com 사랑 과학 행복 사랑 연애 키스 과학 인문학 교양
+    wivlabs@admin.com 광고 페이스북 IT 타겟 효율 키스 광고성과 인문학 구글
+
+    result_list 이러한 형태
+    '''
+    return result_list
+
+
+
+
 
 vocabulary_size = 400000
 
@@ -75,10 +130,58 @@ def most_similar(user_id, size):
         return result
 
 
+#insert into db
+def insert_into():
+    from flask_pymongo import PyMongo, MongoClient
+    app = Flask(__name__)
+    app.config["MONGO_URI"] = "mongodb://onego:test123@onegodev.ddns.net:2727/onego?authsource=admin"
+    mongo = PyMongo(app)
+
+    # DB에 사용자 주입
+    client = MongoClient('mongodb://onego:test123@onegodev.ddns.net:2727/onego?authsource=admin')
+    db = client['onego']
+    collection = db['recommend']
+
+    cursor = mongo.db.user.find({},
+                                {
+                                    "_id": 0,
+                                    "name": 0,
+                                    "nickname": 0,
+                                    "intro": 0,
+                                    "profileImage": 0,
+                                    "scraps": 0,
+                                    "likes": 0,
+                                    "followers": 0,
+                                    "followings": 0,
+                                    "tags": 0,
+                                    "nickName": 0
+                                }
+                                )
+    want_users = list(cursor)
+    list_want_user = []
+    for x in want_users:
+        list_want_user.append(x['email'])
+
+    for want_user in list_want_user:
+        most = most_similar(want_user, 11)
+        list_sim = []
+        for sim in most[1:11]:
+            list_sim.append(sim[0])
+
+            recommend = {
+                "email": want_user,
+                "recommendation": list_sim
+            }
+        print(recommend)
+        recommended = db.recommend
+        recommended.insert(recommend)
+    return 'insert_finish'
+
+
 if __name__ == '__main__':
 
     words = []
-    file = get_from_db.get_keywords()
+    file = get_keywords()
     for f in file:
         words.append(f)
     words = list(chain.from_iterable(words))
@@ -230,6 +333,6 @@ if __name__ == '__main__':
     final_word_embeddings_out = softmax_weights.eval(session=sess)
     final_doc_embeddings = normalized_doc_embeddings.eval(session=sess)
 
-    insert_in_db.insert_into() # db에 추천 user 식별자 넣음
+    insert_into() # db에 추천 user 식별자 넣음
 
 
