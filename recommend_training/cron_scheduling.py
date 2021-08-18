@@ -2,9 +2,6 @@ import time
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 
-
-
-# 1분 10초마다 실행
 def exec_cron():
     print(f'job1: {time.strftime("%H : %M : %S")}')
     f = open('libs/recommendation/get_train_insert.py', encoding='utf-8')
